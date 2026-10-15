@@ -83,6 +83,19 @@ cryptographic verification passed. The installed daemon's native APK reader
 accepted the configured certificate on the phone, and its extracted kernel
 matched the compiled module's SHA-256.
 
-Manager recognition after loading the new kernel and application startup
-after activation remain to be verified. Record those physical-device results
-before marking this variant ready.
+On 2026-10-15, DFRoot loaded the custom module after a full Android reboot.
+The kernel reported version 32694, UAPI 5 and late-load mode. Its certificate
+verifier accepted this APK and crowned the installed package's UID as Manager;
+an authorized shell obtained UID 0. The original Manager is no longer needed
+for root and was retained hidden as a recovery copy.
+
+The user reported successful application startup. A later capture was
+interrupted by a recents cleanup (`SwipeUpClean`); the relaunched process
+remained alive for subsequent checks. These observations cover startup, not
+account authentication or transactions. The diagnostic module is independent
+of this replacement and was marked for removal at the user's request.
+
+DFRoot's boot receiver activated root automatically on this installation.
+Temporary root is lost at reboot until DFRoot loads it again; if automatic
+activation does not run, use DFRoot with this Manager selected. Keep DFRoot
+installed alongside this Manager: they perform different roles.
