@@ -66,15 +66,16 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'APK alignment failed.' }
     & $java -jar $apksigner sign --ks $keystorePath --ks-key-alias $keyAlias `
         --ks-pass env:deviceAccessSigningPassword --key-pass env:deviceAccessSigningPassword `
-        --v1-signing-enabled false --v2-signing-enabled true --v3-signing-enabled true `
+        --v1-signing-enabled false --v2-signing-enabled true --v3-signing-enabled false `
         --v4-signing-enabled false --out $outputApk $alignedApk
     if ($LASTEXITCODE -ne 0) { throw 'APK signing failed.' }
     $verification = & $java -jar $apksigner verify --verbose --print-certs $outputApk
     if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
-    if (-not ($verification -match 'Verified using v2 scheme .*: true$')) {
+    if (-not ($verification -match 'Verified using v2 scheme .*: true$') -or ($verification -match 'Verified using v3.*: true$')) {
         throw 'APK Signature Scheme v2 must remain enabled for kernel verification.'
     }
-    if (-not ($verification -match ([regex]::Escape("certificate SHA-256 digest: $expectedHash")))) {
+    $certificatePattern = [regex]::Escape("certificate SHA-256 digest: $expectedHash")
+    if (-not ($verification -match $certificatePattern)) {
         throw 'APK certificate identity differs from the configured certificate.'
     }
     & $zipalign -c -P 16 4 $outputApk

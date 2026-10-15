@@ -50,7 +50,11 @@ Scheme v2 must remain enabled because the kernel verifies that certificate.
 
 On Windows with PowerShell 7, `customManager/sign.ps1` verifies the artifact
 hash, package ID, public certificate and local key, aligns and signs the APK,
-then verifies the v2 signature, certificate hash and alignment. Supply the
+then verifies the v2 signature, certificate hash and alignment. This fork's
+kernel accepts one v2 block and APK-verity padding only; its daemon also
+rejects v3/v3.1. The signer therefore enables v2 and disables v1, v3 and v4.
+Use the installed daemon's `debug get-sign` command to validate the resulting
+APK against the native reader before activating it. Supply the
 unsigned APK, Windows Android build-tools directory, JDK 21 directory, PKCS12
 keystore, local `Export-Clixml` SecureString password file, and a fresh output
 directory using its named parameters. Password decryption is bound to the
@@ -73,8 +77,12 @@ Resolve and remove baseline entries as the upstream translations are completed.
 
 ## Validation status
 
-Public configuration validation and workflow lint have passed. Compilation
-and device validation are in progress. A successful
-workflow does not by itself confirm that the Manager is recognized by the
-currently loaded kernel or that application startup works after activation.
-Record build and physical-device results before marking this variant ready.
+The full build and lint workflow passed at
+`0bef5f035fb64990caaada7379f49a8f8d9c83f0`. Local signing, alignment and
+cryptographic verification passed. The installed daemon's native APK reader
+accepted the configured certificate on the phone, and its extracted kernel
+matched the compiled module's SHA-256.
+
+Manager recognition after loading the new kernel and application startup
+after activation remain to be verified. Record those physical-device results
+before marking this variant ready.
