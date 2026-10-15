@@ -1,8 +1,23 @@
-name: Custom ARM64 Manager
+name: Device Access
 
 on:
   push:
-    branches: [customManager]
+    branches: [main]
+    paths:
+      - .github/workflows/customManager.yml
+      - .github/workflows/ddk-lkm.yml
+      - .github/workflows/ksuinit.yml
+      - .github/scripts/setup-rust-build.sh
+      - customManager/config.json
+      - customManager/certificate.pem
+      - customManager/prepare.py
+      - manager/**
+      - kernel/**
+      - userspace/**
+      - Cargo.toml
+      - Cargo.lock
+  pull_request:
+    branches: [main]
     paths:
       - .github/workflows/customManager.yml
       - .github/workflows/ddk-lkm.yml
@@ -22,7 +37,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: customManager-${{ github.ref }}
+  group: deviceAccess-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
