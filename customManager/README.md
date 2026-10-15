@@ -2,8 +2,10 @@
 
 This variant uses the existing custom application ID and manager-certificate
 interfaces. It preserves kernel authorization and the app profile UAPI. The
-only Manager code change exposes `KSU_ABIS` to select the architectures to
-package; the default remains the upstream architecture list.
+Manager build configuration exposes `KSU_ABIS` to select the architectures to
+package and `KSU_UPDATE_REPOSITORY` to select the release source. Both defaults
+remain upstream-compatible. This variant queries its owner's fork for updates
+so an upstream APK with a different package and certificate is not offered.
 
 ## Build plan
 
@@ -27,6 +29,9 @@ password, device backup or application log.
 `config.json` targets the verified Redmi 15 ARM64 KMI. `certificate.pem` is
 the public certificate for this installation. Replacing it requires rebuilding
 the kernel module and signing the APK with the matching private key.
+Future update releases must keep that package and signing identity and follow
+the upstream APK asset name pattern `_<versionCode>-release.apk`. This workflow
+only creates artifacts; publication of a release is a separate action.
 
 The DFRoot loader discovers Managers by their extracted `libksud.so` and passes
 the selected package to `late-load --package-name`. Keep the Java namespace

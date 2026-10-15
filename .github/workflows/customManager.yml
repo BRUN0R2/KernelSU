@@ -31,6 +31,7 @@ jobs:
     outputs:
       packageName: ${{ steps.config.outputs.packageName }}
       displayName: ${{ steps.config.outputs.displayName }}
+      updateRepository: ${{ steps.config.outputs.updateRepository }}
       kmi: ${{ steps.config.outputs.kmi }}
       ddkRelease: ${{ steps.config.outputs.ddkRelease }}
       abi: ${{ steps.config.outputs.abi }}
@@ -100,6 +101,7 @@ jobs:
     env:
       MANAGER_PACKAGE: ${{ needs.configure.outputs.packageName }}
       MANAGER_NAME: ${{ needs.configure.outputs.displayName }}
+      MANAGER_UPDATE_REPOSITORY: ${{ needs.configure.outputs.updateRepository }}
       MANAGER_ABI: ${{ needs.configure.outputs.abi }}
     steps:
       - uses: actions/checkout@v7
@@ -134,6 +136,7 @@ jobs:
           ./gradlew assembleRelease lintRelease --no-daemon \
             -PKSU_PACKAGE_NAME="$MANAGER_PACKAGE" \
             -PKSU_NAME="$MANAGER_NAME" \
+            -PKSU_UPDATE_REPOSITORY="$MANAGER_UPDATE_REPOSITORY" \
             -PKSU_ABIS="$MANAGER_ABI"
       - name: Verify artifact and record provenance
         run: |

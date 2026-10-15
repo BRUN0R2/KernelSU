@@ -15,6 +15,8 @@ def prepare():
         raise ValueError("packageName must be a valid lower-case application ID")
     if not re.fullmatch(r"[A-Za-z0-9 ]{1,40}", config["displayName"]):
         raise ValueError("displayName must contain 1 to 40 letters, digits or spaces")
+    if not re.fullmatch(r"[A-Za-z0-9-]+/[A-Za-z0-9_.-]+", config["updateRepository"]):
+        raise ValueError("updateRepository must use owner/repository format")
     if config["kmi"] != "android13-5.15" or config["abi"] != "arm64-v8a":
         raise ValueError("This build is scoped to the verified Redmi 15 KMI and ABI")
     if not re.fullmatch(r"\d{8}", config["ddkRelease"]):
