@@ -114,6 +114,10 @@ jobs:
         with:
           name: customManagerKsud
           path: daemon
+      - uses: actions/download-artifact@v8
+        with:
+          name: aarch64-${{ needs.configure.outputs.kmi }}-lkm
+          path: compiledKernel
       - name: Stage daemon before Gradle
         run: |
           install -Dm755 daemon/ksud "manager/app/src/main/jniLibs/$MANAGER_ABI/libksud.so"
@@ -136,7 +140,9 @@ jobs:
           "$ANDROID_HOME/build-tools/37.0.0/zipalign" -c -P 16 4 "$apk"
           cp "$apk" customManagerOutput/deviceAccess-unsigned.apk
           cp customManager/certificate.pem customManagerOutput/
+          cp compiledKernel/*_kernelsu.ko customManagerOutput/
           python3 - <<'PY'
+          import hashlib
           import json
           import os
           from pathlib import Path
@@ -147,6 +153,9 @@ jobs:
           metadata = prepare()
           metadata["sourceCommit"] = os.environ["GITHUB_SHA"]
           metadata["buildUrl"] = f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+          metadata["unsignedApkSha256"] = hashlib.sha256(Path("customManagerOutput/deviceAccess-unsigned.apk").read_bytes()).hexdigest()
+          metadata["kernelSha256"] = hashlib.sha256(next(Path("compiledKernel").glob("*_kernelsu.ko")).read_bytes()).hexdigest()
+          metadata["daemonSha256"] = hashlib.sha256(Path("daemon/ksud").read_bytes()).hexdigest()
           with zipfile.ZipFile("customManagerOutput/deviceAccess-unsigned.apk") as apk:
               libraries = [name for name in apk.namelist() if name.startswith("lib/")]
               assert libraries and all(name.startswith("lib/arm64-v8a/") for name in libraries)

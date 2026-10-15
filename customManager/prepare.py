@@ -23,6 +23,13 @@ def prepare():
     certificate = ssl.PEM_cert_to_DER_cert(
         (projectRoot / "certificate.pem").read_text(encoding="ascii")
     )
+    verifierSource = (projectRoot.parent / "kernel/manager/apk_sign.c").read_text(encoding="utf-8")
+    limitMatch = re.search(r"^#define\s+CERT_MAX_LENGTH\s+(\d+)\s*$", verifierSource, re.MULTILINE)
+    if not limitMatch:
+        raise ValueError("Cannot determine the kernel verifier's certificate limit")
+    certificateLimit = int(limitMatch.group(1))
+    if len(certificate) > certificateLimit:
+        raise ValueError(f"Certificate exceeds the kernel verifier's {certificateLimit}-byte limit")
     metadata = {
         **config,
         "certificateSize": hex(len(certificate)),

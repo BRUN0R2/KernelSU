@@ -33,15 +33,26 @@ the selected package to `late-load --package-name`. Keep the Java namespace
 `me.weishu.kernelsu` intact so its explicit activity and JNI contracts remain
 compatible with the existing loader.
 
-Run `python customManager/prepare.py` to validate the public inputs. The
+Run `python customManager/prepare.py` to validate the public inputs, including
+the DER size limit read from the kernel's certificate verifier. The
 `Custom ARM64 Manager` workflow builds the module, init binary, daemon, and
 Manager. The unsigned APK deliberately has no production signing credential
 in CI. Use Android build-tools `zipalign` and `apksigner` locally; APK Signature
 Scheme v2 must remain enabled because the kernel verifies that certificate.
 
+On Windows with PowerShell 7, `customManager/sign.ps1` verifies the artifact
+hash, package ID, public certificate and local key, aligns and signs the APK,
+then verifies the v2 signature, certificate hash and alignment. Supply the
+unsigned APK, Windows Android build-tools directory, JDK 21 directory, PKCS12
+keystore, local `Export-Clixml` SecureString password file, and a fresh output
+directory using its named parameters. Password decryption is bound to the
+Windows account and computer that saved it; retain a separate secure backup
+of the signing credentials if the build must survive migration to another PC.
+
 ## Validation status
 
-Public configuration and source preparation are in progress. A successful
+Public configuration validation and workflow lint have passed. Compilation
+and device validation are in progress. A successful
 workflow does not by itself confirm that the Manager is recognized by the
 currently loaded kernel or that application startup works after activation.
 Record build and physical-device results before marking this variant ready.
