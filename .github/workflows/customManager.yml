@@ -110,6 +110,8 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
       - uses: actions/download-artifact@v8
         with:
           name: customManagerKsud
@@ -122,7 +124,10 @@ jobs:
         run: |
           install -Dm755 daemon/ksud "manager/app/src/main/jniLibs/$MANAGER_ABI/libksud.so"
       - name: Install Android SDK components
-        run: sdkmanager 'platforms;android-37' 'build-tools;37.0.0' 'cmake;3.22.1'
+        uses: android-actions/setup-android@v4.0.4
+        with:
+          packages: 'platforms;android-37 build-tools;37.0.0 cmake;3.22.1'
+          log-accepted-android-sdk-licenses: false
       - name: Build and lint unsigned manager
         working-directory: manager
         run: |
