@@ -2,3 +2,4 @@
 /README.md text eol=lf
 customManager/** text eol=lf
 .github/workflows/customManager.yml text eol=lf
+manager/app/lintBaseline.xml text eol=lf
