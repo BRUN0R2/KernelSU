@@ -1,0 +1,7 @@
+{
+  "packageName": "dev.bruno.deviceaccess",
+  "displayName": "Device Access",
+  "kmi": "android13-5.15",
+  "ddkRelease": "20260828",
+  "abi": "arm64-v8a"
+}
