@@ -137,6 +137,7 @@ jobs:
             -PKSU_PACKAGE_NAME="$MANAGER_PACKAGE" \
             -PKSU_NAME="$MANAGER_NAME" \
             -PKSU_UPDATE_REPOSITORY="$MANAGER_UPDATE_REPOSITORY" \
+            -PmanagerLintBaseline=lintBaseline.xml \
             -PKSU_ABIS="$MANAGER_ABI"
       - name: Verify artifact and record provenance
         run: |

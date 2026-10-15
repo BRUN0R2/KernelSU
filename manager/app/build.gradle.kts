@@ -27,6 +27,7 @@ val defaultManagerPackageName = if (isPrBuild) "me.weishu.kernelsu.pr" else "me.
 val defaultManagerName = if (isPrBuild) "KernelSU PR" else "KernelSU"
 val managerPackageName = project.findProperty("KSU_PACKAGE_NAME")?.toString() ?: defaultManagerPackageName
 val managerName = project.findProperty("KSU_NAME")?.toString() ?: defaultManagerName
+val managerLintBaseline = providers.gradleProperty("managerLintBaseline").orNull
 val managerUpdateRepository = providers.gradleProperty("KSU_UPDATE_REPOSITORY")
     .getOrElse("diabl0w/KernelSU")
 require(Regex("[A-Za-z0-9-]+/[A-Za-z0-9_.-]+").matches(managerUpdateRepository)) {
@@ -179,6 +180,7 @@ android {
     lint {
         abortOnError = true
         checkReleaseBuilds = false
+        managerLintBaseline?.let { baseline = file(it) }
     }
 
     compileOptions {

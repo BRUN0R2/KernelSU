@@ -57,6 +57,20 @@ directory using its named parameters. Password decryption is bound to the
 Windows account and computer that saved it; retain a separate secure backup
 of the signing credentials if the build must survive migration to another PC.
 
+## Existing translation debt
+
+The first full release build succeeded at `a12ec0b028765d69c9128c62486db65eeb21678b`.
+Its explicit `lintRelease` step found 325 `MissingTranslation` errors and 42
+warnings already present in upstream resources/code. Every error points to
+`src/main/res/values/strings.xml`, which was verified byte-for-byte against
+the base commit after normalizing checkout line endings.
+
+`manager/app/lintBaseline.xml` records only those 325 translation errors. The
+custom workflow opts into it with `-PmanagerLintBaseline=lintBaseline.xml`;
+other build configurations keep the previous lint behavior. Checks remain
+enabled, new lint errors remain fatal, and the complete report is uploaded.
+Resolve and remove baseline entries as the upstream translations are completed.
+
 ## Validation status
 
 Public configuration validation and workflow lint have passed. Compilation
