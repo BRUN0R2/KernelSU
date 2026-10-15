@@ -1,6 +1,7 @@
 # Device Access
 
 [![Build](https://github.com/BRUN0R2/KernelSU/actions/workflows/customManager.yml/badge.svg?branch=main)](https://github.com/BRUN0R2/KernelSU/actions/workflows/customManager.yml)
+[![Release](https://img.shields.io/github/v/release/BRUN0R2/KernelSU)](https://github.com/BRUN0R2/KernelSU/releases/latest)
 
 [Portugues (Brasil)](docs/README_PT-BR.md#device-access)
 
@@ -34,7 +35,8 @@ The KMI identifies the kernel interface, independently of the Android version.
 
 ## Use
 
-1. Install an APK signed with this build's matching local key.
+1. Download and install the signed APK from [Releases](https://github.com/BRUN0R2/KernelSU/releases/latest).
+   Verify its SHA-256 against the attached `SHA256SUMS.txt`.
 2. Select **Device Access** in DFRoot.
 3. Restart Android when switching from another Manager's kernel, then let
    DFRoot activate root. Use its activation button if needed.

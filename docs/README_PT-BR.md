@@ -16,7 +16,9 @@ Mantenha **Device Access + DFRoot**: o primeiro gerencia o root e fornece o
 módulo; o segundo o carrega. Basta um gerenciador KernelSU. A probe de diagnóstico
 usada no desenvolvimento é opcional.
 
-Para usar, instale o APK assinado e selecione **Device Access** no DFRoot.
+Para usar, baixe o APK assinado em
+[Releases](https://github.com/BRUN0R2/KernelSU/releases/latest), confira o SHA-256
+em `SHA256SUMS.txt`, instale-o e selecione **Device Access** no DFRoot.
 Ao trocar o kernel de outro gerenciador, reinicie e deixe o DFRoot ativar o root.
 Confirme o reconhecimento do novo gerenciador antes de remover o anterior.
 

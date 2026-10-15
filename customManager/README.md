@@ -84,6 +84,26 @@ Preserve a secure backup of the signing credentials for future updates.
   `-PmanagerLintBaseline=lintBaseline.xml`; new lint errors remain fatal.
   Remove entries as their translations are completed.
 
+## Publishing releases
+
+1. Choose a `vMAJOR.MINOR.PATCH` tag and an exact `main` commit with a successful
+   **Device Access** run. Promote that run's artifact instead of rebuilding it
+   during publication. The APK keeps its Git-derived build version; the release
+   tag identifies the distribution version.
+2. Sign locally and verify the APK, certificate and embedded kernel. Name the
+   APK `DeviceAccess-v<releaseVersion>_<versionCode>-release.apk` so the existing
+   updater can find it.
+3. Prepare a source archive of that commit, `buildMetadata.json`,
+   `certificate.pem`, `signatureVerification.txt` and `SHA256SUMS.txt`.
+   Keep the metadata's source commit and CI URL tied to the promoted artifact.
+4. Create a draft release targeting that exact commit. Attach all public files
+   and describe compatibility, installation and verification in the notes.
+5. Verify the uploaded names and hashes, then publish as the latest stable
+   release. This repository enables immutable releases: published assets and
+   their tag stay fixed. Ship corrections under a new version.
+
+See [GitHub's immutable release workflow](https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases).
+
 ## Validation
 
 [Build and lint passed](https://github.com/BRUN0R2/KernelSU/actions/runs/38793747955)
