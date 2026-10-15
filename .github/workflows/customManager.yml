@@ -5,8 +5,17 @@ on:
     branches: [customManager]
     paths:
       - .github/workflows/customManager.yml
-      - customManager/**
-      - manager/app/build.gradle.kts
+      - .github/workflows/ddk-lkm.yml
+      - .github/workflows/ksuinit.yml
+      - .github/scripts/setup-rust-build.sh
+      - customManager/config.json
+      - customManager/certificate.pem
+      - customManager/prepare.py
+      - manager/**
+      - kernel/**
+      - userspace/**
+      - Cargo.toml
+      - Cargo.lock
   workflow_dispatch:
 
 permissions:
