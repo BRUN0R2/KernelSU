@@ -125,10 +125,10 @@ jobs:
       - name: Stage daemon before Gradle
         run: |
           install -Dm755 daemon/ksud "manager/app/src/main/jniLibs/$MANAGER_ABI/libksud.so"
-      - name: Install Android SDK components
+      - name: Bootstrap Android SDK for Gradle
         uses: android-actions/setup-android@v4.0.4
         with:
-          packages: 'platforms;android-37 build-tools;37.0.0 cmake;3.22.1'
+          packages: ''
           log-accepted-android-sdk-licenses: false
       - name: Build and lint unsigned manager
         working-directory: manager

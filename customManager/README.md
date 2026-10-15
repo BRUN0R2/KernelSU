@@ -41,7 +41,10 @@ compatible with the existing loader.
 Run `python customManager/prepare.py` to validate the public inputs, including
 the DER size limit read from the kernel's certificate verifier. The
 `Custom ARM64 Manager` workflow builds the module, init binary, daemon, and
-Manager. The unsigned APK deliberately has no production signing credential
+Manager. SDK setup installs the command-line tools and accepts SDK licenses;
+Gradle installs the platform, build-tools, NDK and CMake versions required by
+the project, avoiding a second platform-version declaration in the workflow.
+The unsigned APK deliberately has no production signing credential
 in CI. Use Android build-tools `zipalign` and `apksigner` locally; APK Signature
 Scheme v2 must remain enabled because the kernel verifies that certificate.
 
