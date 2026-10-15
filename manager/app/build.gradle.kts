@@ -27,6 +27,18 @@ val defaultManagerPackageName = if (isPrBuild) "me.weishu.kernelsu.pr" else "me.
 val defaultManagerName = if (isPrBuild) "KernelSU PR" else "KernelSU"
 val managerPackageName = project.findProperty("KSU_PACKAGE_NAME")?.toString() ?: defaultManagerPackageName
 val managerName = project.findProperty("KSU_NAME")?.toString() ?: defaultManagerName
+val managerLintBaseline = providers.gradleProperty("managerLintBaseline").orNull
+val managerUpdateRepository = providers.gradleProperty("KSU_UPDATE_REPOSITORY")
+    .getOrElse("diabl0w/KernelSU")
+require(Regex("[A-Za-z0-9-]+/[A-Za-z0-9_.-]+").matches(managerUpdateRepository)) {
+    "KSU_UPDATE_REPOSITORY must use owner/repository format"
+}
+val managerAbis = providers.gradleProperty("KSU_ABIS")
+    .map { value -> value.split(',').map(String::trim).filter(String::isNotEmpty) }
+    .getOrElse(listOf("arm64-v8a", "x86_64", "riscv64"))
+require(managerAbis.isNotEmpty() && managerAbis.all { it in setOf("arm64-v8a", "x86_64", "riscv64") }) {
+    "KSU_ABIS must contain supported comma-separated Android ABIs"
+}
 
 apksign {
     storeFileProperty = "KEYSTORE_FILE"
@@ -149,6 +161,7 @@ android {
         applicationId = managerPackageName
 
         buildConfigField("boolean", "IS_PR_BUILD", isPrBuild.toString())
+        buildConfigField("String", "UPDATE_REPOSITORY", "\"$managerUpdateRepository\"")
         resValue("string", "app_name", managerName)
 
         externalNativeBuild {
@@ -160,13 +173,14 @@ android {
         }
 
         ndk {
-            abiFilters += listOf("arm64-v8a", "x86_64", "riscv64")
+            abiFilters += managerAbis
         }
     }
 
     lint {
         abortOnError = true
         checkReleaseBuilds = false
+        managerLintBaseline?.let { baseline = file(it) }
     }
 
     compileOptions {

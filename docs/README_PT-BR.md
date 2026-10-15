@@ -1,5 +1,36 @@
 [English](README.md) | [Español](README_ES.md) | [简体中文](README_CN.md) | [繁體中文](README_TW.md) | [日本語](README_JP.md) | [한국어](README_KR.md) | [Polski](README_PL.md) | **Português (Brasil)** | [Türkçe](README_TR.md) | [Русский](README_RU.md) | [Tiếng Việt](README_VI.md) | [Indonesia](README_ID.md) | [עברית](README_IW.md) | [हिंदी](README_IN.md) | [Italiano](README_IT.md)
 
+# Device Access
+
+Este fork mantém uma variante pessoal do KernelSU para root temporário com
+[DFRoot](https://github.com/diabl0w/DFRoot). O gerenciador usa o nome
+**Device Access**, o pacote `dev.bruno.deviceaccess` e um módulo de kernel
+compilado para reconhecer seu certificado.
+
+A branch `main` reúne a variante mantida. A `customManager` registra sua
+implementação inicial, integrada à `main`; novas alterações partem da `main`.
+O alvo validado é o Redmi 15 com Android 16, arquitetura ARM64 e KMI
+`android13-5.15`. O KMI identifica a interface do kernel.
+
+Mantenha **Device Access + DFRoot**: o primeiro gerencia o root e fornece o
+módulo; o segundo o carrega. Basta um gerenciador KernelSU. A probe de diagnóstico
+usada no desenvolvimento é opcional.
+
+Para usar, instale o APK assinado e selecione **Device Access** no DFRoot.
+Ao trocar o kernel de outro gerenciador, reinicie e deixe o DFRoot ativar o root.
+Confirme o reconhecimento do novo gerenciador antes de remover o anterior.
+
+O workflow **Device Access** compila e executa o lint em alterações dos arquivos
+de compilação na `main` e em PRs para ela. O artefato `customManagerUnsigned`
+contém o APK sem assinatura, o módulo e seus hashes; a assinatura é feita
+localmente. A chave privada permanece fora do repositório.
+
+- [Visão geral do projeto](../README.md)
+- [Configuração, assinatura e atualizações](../customManager/README.md)
+- [Configuração atual](../customManager/config.json)
+
+A documentação herdada do KernelSU continua abaixo.
+
 # KernelSU
 
 <img src="https://kernelsu.org/logo.png" style="width: 96px;" alt="logo">
